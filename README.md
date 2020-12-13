@@ -10,6 +10,10 @@
 - `go run cmd/beers-cli/main.go beers`
 - `go run cmd/beers-cli/main.go beers -i 01D9X5BQ5X48XMMVZ2F2G3R5MS` or `go run cmd/beers-cli/main.go beers --id 01D9X5BQ5X48XMMVZ2F2G3R5MS`
 - If we run `go run cmd/beers-cli/main.go beer`, it will show a pretty error message, and will show suggestions
+- `go run cmd/beers-cli/main.go stores --help`
+- `go run cmd/beers-cli/main.go stores`
+- `go run cmd/beers-cli/main.go stores -i 01DC9ZAPGKEQJS4P4A48EG3P43` or `go run cmd/beers-cli/main.go stores --id 01DC9ZAPGKEQJS4P4A48EG3P43`
+- If we run `go run cmd/beers-cli/main.go store`, it will show a pretty error message, and will show suggestions
 
 # For add cobra
 - Add "github.com/spf13/cobra" in imports where it will be used
