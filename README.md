@@ -8,7 +8,7 @@
 - `go run cmd/beers-cli/main.go`
 - `go run cmd/beers-cli/main.go beers --help`
 - `go run cmd/beers-cli/main.go beers`
-- `go run cmd/beers-cli/main.go beers -i 01D9X5BQ5X48XMMVZ2F2G3R5MS` or `go run cmd/beers-cli/main.go beers --id 01D9X5BQ5X48XMMVZ2F2G3R5MS`
+- `go run cmd/beers-cli/main.go beers -i 131` or `go run cmd/beers-cli/main.go beers --id 131`
 - If we run `go run cmd/beers-cli/main.go beer`, it will show a pretty error message, and will show suggestions
 
 # For add cobra
