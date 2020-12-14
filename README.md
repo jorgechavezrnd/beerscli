@@ -4,7 +4,7 @@
 - In $GOPATH/src/github.com/jorgechavezrnd: `mkdir test_project`
 - In test_project directory: `go mod init`
 
-# Example commands for run the app
+# Example commands for run the app (for use csv repository, modifie main.go)
 - `go run cmd/beers-cli/main.go`
 - `go run cmd/beers-cli/main.go beers --help`
 - `go run cmd/beers-cli/main.go beers`
