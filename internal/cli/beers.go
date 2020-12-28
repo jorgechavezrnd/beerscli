@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	beerscli "github.com/jorgechavezrnd/test_project/internal"
+	"github.com/jorgechavezrnd/test_project/internal/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -30,7 +31,7 @@ func InitBeersCmd(repository beerscli.BeerRepo) *cobra.Command {
 func runBeersFn(repository beerscli.BeerRepo) CobraFn {
 	return func(cmd *cobra.Command, args []string) {
 		beers, err := repository.GetBeers()
-		if err != nil {
+		if errors.IsDataUnreacheable(err) {
 			log.Fatal(err)
 		}
 
