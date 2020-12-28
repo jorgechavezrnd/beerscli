@@ -7,6 +7,7 @@ import (
 	"net/http"
 
 	beerscli "github.com/jorgechavezrnd/test_project/internal"
+	"github.com/pkg/errors"
 )
 
 const (
@@ -26,19 +27,17 @@ func NewOntarioRepository() beerscli.BeerRepo {
 func (b *beerRepo) GetBeers() (beers []beerscli.Beer, err error) {
 	response, err := http.Get(fmt.Sprintf("%v%v", b.url, productsEndpoint))
 	if err != nil {
-		return nil, err
+		return nil, errors.Wrapf(err, "Something happened when call the endpoint: %s", productsEndpoint)
 	}
 
 	contents, err := ioutil.ReadAll(response.Body)
 	if err != nil {
-		fmt.Println("Error on read all: ", err)
-		return nil, err
+		return nil, errors.Wrap(err, "Something happened when read the content")
 	}
 
 	err = json.Unmarshal(contents, &beers)
 	if err != nil {
-		fmt.Println("Error on unmarshal: ", err)
-		return nil, err
+		return nil, errors.Wrap(err, "Something happened when unmarshal the content")
 	}
 	return
 }

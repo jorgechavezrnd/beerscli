@@ -2,6 +2,7 @@ package cli
 
 import (
 	"fmt"
+	"log"
 	"strconv"
 
 	beerscli "github.com/jorgechavezrnd/test_project/internal"
@@ -28,7 +29,10 @@ func InitBeersCmd(repository beerscli.BeerRepo) *cobra.Command {
 
 func runBeersFn(repository beerscli.BeerRepo) CobraFn {
 	return func(cmd *cobra.Command, args []string) {
-		beers, _ := repository.GetBeers()
+		beers, err := repository.GetBeers()
+		if err != nil {
+			log.Fatal(err)
+		}
 
 		id, _ := cmd.Flags().GetString(idFlag)
 
