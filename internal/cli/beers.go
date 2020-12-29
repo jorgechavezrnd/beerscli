@@ -5,8 +5,7 @@ import (
 	"log"
 	"strconv"
 
-	beerscli "github.com/jorgechavezrnd/test_project/internal"
-	"github.com/jorgechavezrnd/test_project/internal/errors"
+	"github.com/jorgechavezrnd/test_project/internal/fetching"
 	"github.com/spf13/cobra"
 )
 
@@ -16,11 +15,11 @@ type CobraFn func(cmd *cobra.Command, args []string)
 const idFlag = "id"
 
 // InitBeersCmd initialize beers command
-func InitBeersCmd(repository beerscli.BeerRepo) *cobra.Command {
+func InitBeersCmd(service fetching.Service) *cobra.Command {
 	beersCmd := &cobra.Command{
 		Use:   "beers",
 		Short: "Print data about beers",
-		Run:   runBeersFn(repository),
+		Run:   runBeersFn(service),
 	}
 
 	beersCmd.Flags().StringP(idFlag, "i", "", "id of the beer")
@@ -28,25 +27,24 @@ func InitBeersCmd(repository beerscli.BeerRepo) *cobra.Command {
 	return beersCmd
 }
 
-func runBeersFn(repository beerscli.BeerRepo) CobraFn {
+func runBeersFn(service fetching.Service) CobraFn {
 	return func(cmd *cobra.Command, args []string) {
-		beers, err := repository.GetBeers()
-		if errors.IsDataUnreacheable(err) {
-			log.Fatal(err)
-		}
-
 		id, _ := cmd.Flags().GetString(idFlag)
-
 		if id != "" {
 			i, _ := strconv.Atoi(id)
-			for _, beer := range beers {
-				if beer.ProductID == i {
-					fmt.Println(beer)
-					return
-				}
+			beer, err := service.FetchByID(i)
+			if err != nil {
+				log.Fatal(err)
 			}
-		} else {
-			fmt.Println(beers)
+
+			fmt.Println(beer)
+			return
 		}
+
+		beers, err := service.FetchBeers()
+		if err != nil {
+			log.Fatal(err)
+		}
+		fmt.Println(beers)
 	}
 }

@@ -14,3 +14,14 @@
 # For add cobra
 - Add "github.com/spf13/cobra" in imports where it will be used
 - Run `go mod tidy` (This is something like `composer install` or `composer update`, It get all the dependencies that we have in "imports" and add the dependencies in 'go.mod' file and create 'go.sum' file)
+
+# Commands for install moq and generate mock repository with moq (URL: https://github.com/matryer/moq)
+- Install moq: `go get github.com/matryer/moq`
+- `cd internal/storage/mock`
+- `moq -pkg mock -out repository.go ../../. BeerRepo`
+
+# Command for run all tests
+- `go test -v ./...`
+
+# Comand example for run one specific test
+- `go test ./... -run=TestFetchByID/"valid beer"`

@@ -4,6 +4,7 @@ import (
 	"flag"
 
 	"github.com/jorgechavezrnd/test_project/internal/cli"
+	"github.com/jorgechavezrnd/test_project/internal/fetching"
 	"github.com/jorgechavezrnd/test_project/internal/storage/csv"
 	"github.com/jorgechavezrnd/test_project/internal/storage/ontario"
 	"github.com/spf13/cobra"
@@ -22,7 +23,9 @@ func main() {
 		repo = ontario.NewOntarioRepository()
 	}
 
+	fetchingService := fetching.NewService(repo)
+
 	rootCmd := &cobra.Command{Use: "beers-cli"}
-	rootCmd.AddCommand(cli.InitBeersCmd(repo))
+	rootCmd.AddCommand(cli.InitBeersCmd(fetchingService))
 	rootCmd.Execute()
 }
