@@ -42,3 +42,10 @@
 - `top 5`
 - `web` (We need to install Graphviz before)
 - `exit`
+
+# Commands for run benchmarking
+- `cd internal/storage/ontario`
+- `go test -bench GetBeers`
+- `go test -bench GetBeers > bench.old` (Ensure to use "standardUnmarshal" method in ontario/repository.go)
+- `go test -bench GetBeers > bench.new` (Ensure to use "betterUnmarshal" method in ontario/repository.go)
+- `benchcmp bench.old bench.new` (Before this, install "benchcmp". This is depricated, so try to use "benchstat")
