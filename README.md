@@ -25,3 +25,20 @@
 
 # Comand example for run one specific test
 - `go test ./... -run=TestFetchByID/"valid beer"`
+
+# Commands for run memory profiling code
+- Ensure that code between '//Memory profiling code starts here' and '//Memory profiling code ends here' is uncommented
+- `go run cmd/beers-cli/main.go beers`
+- move 'beers.mem.prof' generated file to 'cmd/beers-cli' directory
+- `go tool pprof cmd/beers-cli/main.go cmd/beers-cli/beers.mem.prof`
+- `top 5`
+- `exit`
+
+# Commands for run CPU profiling code
+- Ensure that code between '//CPU profiling code starts here' and '//CPU profiling code ends here' is uncommented
+- `go run cmd/beers-cli/main.go beers`
+- move 'beers.cpu.prof' generated file to 'cmd/beers-cli' directory
+- `go tool pprof cmd/beers-cli/main.go cmd/beers-cli/beers.cpu.prof`
+- `top 5`
+- `web` (We need to install Graphviz before)
+- `exit`
