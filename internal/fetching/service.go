@@ -2,9 +2,9 @@ package fetching
 
 import (
 	"math"
-	"sync"
 
 	beerscli "github.com/jorgechavezrnd/test_project/internal"
+	"github.com/pkg/errors"
 )
 
 // Service provides beer fetching operations
@@ -37,25 +37,41 @@ func (s *service) FetchByID(id int) (beerscli.Beer, error) {
 	beersPerRoutine := 10
 	numRoutines := numberOfRoutines(len(beers), beersPerRoutine)
 
-	wg := &sync.WaitGroup{}
-	wg.Add(numRoutines)
-
-	var b beerscli.Beer
+	b := make(chan beerscli.Beer)
+	done := make(chan bool, numRoutines)
 
 	for i := 0; i < numRoutines; i++ {
-		go func(id, begin, end int, beers []beerscli.Beer, b *beerscli.Beer, wg *sync.WaitGroup) {
-			for i := begin; i <= end; i++ {
-				if beers[i].ProductID == id {
-					*b = beers[i]
+		toSearch := make([]beerscli.Beer, beersPerRoutine)
+		init := i * beersPerRoutine
+		end := init + beersPerRoutine - 1
+		if len(beers) < end {
+			end = len(beers)
+		}
+		copy(toSearch[:], beers[init:end])
+
+		go func(beers []beerscli.Beer, b chan beerscli.Beer, done chan bool) {
+			for _, beer := range beers {
+				if beer.ProductID == id {
+					b <- beer
 				}
 			}
-			wg.Done()
-		}(id, i, i+beersPerRoutine, beers, &b, wg)
+
+			done <- true
+		}(toSearch, b, done)
 	}
 
-	wg.Wait()
+	var beer beerscli.Beer
+	i := 0
+	for i < numRoutines {
+		select {
+		case beer = <-b:
+			return beer, nil
+		case <-done:
+			i++
+		}
+	}
 
-	return b, nil
+	return beerscli.Beer{}, errors.Errorf("Beer %d not found", id)
 }
 
 func numberOfRoutines(numbOfBeers, beersPerRoutine int) int {
